@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Contracts\AuthInterface;
 use App\DataTransferObjects\NoteData;
 use App\Events\NoteEvent;
 use App\Exceptions\DatabaseException;
@@ -18,10 +19,10 @@ class NoteService
 
     public function __construct(
         DatabaseRepositoryInterface $noteRepository,
-        \Illuminate\Support\Facades\Auth $auth
+        AuthInterface $auth
     ) {
         $this->noteRepository = $noteRepository;
-        $this->userId         = $auth::id();
+        $this->userId         = $auth->id();
     }
 
     /**
