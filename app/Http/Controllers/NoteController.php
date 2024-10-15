@@ -5,8 +5,13 @@ namespace App\Http\Controllers;
 use App\DataTransferObjects\NoteData;
 use App\Http\Requests\Notes\StoreRequest;
 use App\Http\Requests\Notes\UpdateRequest;
+use App\Http\Resources\Notes\AdvancedNoteResource;
+use App\Http\Resources\Notes\FolderNoteResource;
+use App\Http\Resources\Notes\NoteResource;
 use App\Services\NoteService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\Resources\Json\ResourceCollection;
 use Swagger\Annotations as SWG;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -30,16 +35,11 @@ class NoteController extends Controller
      *     )
      * )
      */
-    public function index(): JsonResponse
+    public function index(): ResourceCollection
     {
         $notes = $this->noteService->getNotes();
 
-        return new JsonResponse(
-            [
-                "data" => $notes,
-            ],
-            Response::HTTP_OK
-        );
+        return NoteResource::collection($notes);
     }
 
     /**
@@ -85,12 +85,9 @@ class NoteController extends Controller
 
         $note = $this->noteService->createNote($data);
 
-        return new JsonResponse(
-            [
-                "data" => $note,
-            ],
-            Response::HTTP_CREATED
-        );
+        return (new NoteResource($note))
+            ->response()
+            ->setStatusCode(Response::HTTP_CREATED);
     }
 
     /**
@@ -115,16 +112,11 @@ class NoteController extends Controller
      *     )
      * )
      */
-    public function view(int $id): JsonResponse
+    public function view(int $id): JsonResource
     {
         $note = $this->noteService->getNote($id);
 
-        return new JsonResponse(
-            [
-                "data" => $note,
-            ],
-            Response::HTTP_OK
-        );
+        return new AdvancedNoteResource($note);
     }
 
     /**
@@ -169,12 +161,9 @@ class NoteController extends Controller
 
         $note = $this->noteService->updateNote($id, $data);
 
-        return new JsonResponse(
-            [
-                "data" => $note,
-            ],
-            Response::HTTP_ACCEPTED
-        );
+        return (new NoteResource($note))
+            ->response()
+            ->setStatusCode(Response::HTTP_ACCEPTED);
     }
 
     /**
@@ -203,7 +192,10 @@ class NoteController extends Controller
     {
         $this->noteService->destroyNote($id);
 
-        return new JsonResponse(null, Response::HTTP_NO_CONTENT);
+        return new JsonResponse(
+            null,
+            Response::HTTP_NO_CONTENT
+        );
     }
 
     /**
@@ -228,15 +220,10 @@ class NoteController extends Controller
      *     )
      * )
      */
-    public function viewFolder(int $id): JsonResponse
+    public function viewFolder(int $id): JsonResource
     {
         $note = $this->noteService->getFolder($id);
 
-        return new JsonResponse(
-            [
-                "data" => $note,
-            ],
-            Response::HTTP_OK
-        );
+        return new FolderNoteResource($note);
     }
 }

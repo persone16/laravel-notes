@@ -16,8 +16,10 @@ class NoteService
     private $noteRepository;
     private $userId;
 
-    public function __construct(DatabaseRepositoryInterface $noteRepository, \Illuminate\Support\Facades\Auth $auth)
-    {
+    public function __construct(
+        DatabaseRepositoryInterface $noteRepository,
+        \Illuminate\Support\Facades\Auth $auth
+    ) {
         $this->noteRepository = $noteRepository;
         $this->userId         = $auth::id();
     }
