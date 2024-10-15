@@ -3,11 +3,11 @@
 namespace App\Services;
 
 use App\Contracts\AuthInterface;
+use App\Contracts\DatabaseRepositoryInterface;
 use App\DataTransferObjects\NoteData;
 use App\Events\NoteEvent;
 use App\Exceptions\DatabaseException;
 use App\Model\Note;
-use App\Repositories\Interfaces\DatabaseRepositoryInterface;
 use Exception;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;

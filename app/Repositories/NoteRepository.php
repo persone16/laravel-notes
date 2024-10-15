@@ -2,9 +2,9 @@
 
 namespace App\Repositories;
 
+use App\Contracts\DatabaseRepositoryInterface;
 use App\Exceptions\DatabaseException;
 use App\Model\Note;
-use App\Repositories\Interfaces\DatabaseRepositoryInterface;
 use Exception;
 use Illuminate\Database\Eloquent\Collection;
 
