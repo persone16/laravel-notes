@@ -113,14 +113,14 @@ class NoteService
 
             $this->noteRepository->destroy($recordId, $this->userId);
 
-            event(new NoteEvent(["owner_id" => $this->userId]));
-
             DB::commit();
         } catch (Exception $e) {
             DB::rollBack();
 
             throw new DatabaseException($e->getMessage());
         }
+
+        event(new NoteEvent(["owner_id" => $this->userId]));
     }
 
     /**
